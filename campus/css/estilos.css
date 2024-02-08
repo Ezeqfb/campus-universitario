@@ -1,0 +1,21 @@
+/* Estilos para NAV*/
+
+/* Estilos para CURSOS */
+
+/* Estilos para la caja del curso */
+.curso-caja {
+    border: 1px solid #ccc; /* Borde de color gris claro */
+    padding: 10px; /* Espacio interno alrededor del contenido */
+    margin-bottom: 20px; /* Margen inferior para separar los cursos */
+    text-decoration: none; /* Eliminar subrayado del enlace */
+    display: inline-block; /* Hacer que el enlace se comporte como un bloque en línea */
+    width: 100%; /* Ancho completo del contenedor */
+    transition: background-color 0.3s; /* Transición suave del color de fondo */
+}
+
+/* Estilos para cuando el cursor pasa sobre la caja del curso */
+.curso-caja:hover {
+    background-color: #f9f9f9; /* Cambio de color de fondo al pasar el cursor */
+}
+
+/* */
