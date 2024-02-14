@@ -2,7 +2,7 @@
 session_start();
 
 // Verificar si hay una sesión activa
-if(isset($_SESSION['id_usuario'])) {
+if (isset($_SESSION['id_usuario'])) {
     // Obtener el ID del usuario
     $id_usuario = $_SESSION['id_usuario'];
 
@@ -46,38 +46,34 @@ if(isset($_SESSION['id_usuario'])) {
     <link rel="stylesheet" href="../css/estilos.css">
     <title>Campus - Inicio</title>
 </head>
-<body>
-    <!-- Header para el alumno -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<body id="index-body">
+    <!-- Header para el admin -->
+    <header class="bg-white">
+        <nav class="navbar navbar-expand navbar-light container">
             <div class="container-fluid">
                 <!-- Nombre del sitio o logo -->
-                <a class="navbar-brand" href="#">Nombre del Sitio</a>
+                <img id="logo" src="../media/img/cudi1.png" alt="">
 
-                <!-- Botón para dispositivos móviles -->
+                <!-- Botón para dispositivos móviles 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button>-->
 
                 <!-- Menú de navegación -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Mostrar el nombre del usuario -->
+                    <ul class="navbar-nav" style="margin-left: auto;">
+                        <!-- Enlace a la página principal -->
                         <li class="nav-item">
-                            <span class="navbar-text">
-                                ¡Hola, <?php echo $nombre_usuario; ?>!
-                            </span>
+                            <a class="nav-link" href="../index.php">PÁGINA PRINCIPAL</a>
                         </li>
-
                         <!-- Enlace al perfil del alumno -->
                         <li class="nav-item">
-                            <a class="nav-link" href="perfil_alumno.php">Perfil</a>
+                            <a class="nav-link" href="pagina_administrador.php">INICIO</a>
                         </li>
-
                         <!-- Botón para cerrar sesión -->
                         <li class="nav-item">
                             <form method="post" action="../php/cerrar_sesion.php">
-                                <button type="submit" name="cerrar_sesion" class="nav-link btn btn-link">Cerrar Sesión</button>
+                                <button type="submit" name="cerrar_sesion" class="nav-link btn btn-link">CERRAR SESIÓN</button>
                             </form>
                         </li>
                     </ul>
@@ -86,29 +82,98 @@ if(isset($_SESSION['id_usuario'])) {
         </nav>
     </header>
 
-    <!-- Contenido de la página -->
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container">
+            <div class="txt">
+                <h2>¡Bienvenido <?php echo $rol_usuario; ?> <?php echo $nombre_usuario; ?>!</h2>
+                <hr class="container">
+                <h5>Área administrativa</h5>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Cursos Section -->
+    <section>
     <div class="container">
-        Hola admin!
-
-        <h2>Acciones</h2>
-
-        <a href="cursos/admin_cursos.php">Ver cursos</a><br>
-        <a href="registrar/registro.php">Agregar nuevo usuario</a><br>
-        <a href="avisos/admin_avisos.php">Crear aviso</a>
+        <div class="seccion">
+            <h3>Acciones</h3>
+            <hr class="container">
+            <h5>Herramientas disponibles</h5>
+            <div class="curso-caja">
+            <a class="btn btn-secondary" href="admin_cursos.php">Ver cursos</a><br><br>
+            <a class="btn btn-secondary" href="registro.php">Agregar nuevo usuario</a><br><br>
+            <a class="btn btn-secondary" href="admin_avisos.php">Crear aviso</a>
+            </div>
+        </div>
     </div>
+    </section>
 
-    <!-- Contenido de la página -->
-    <div class="container">
-        <!-- Resto del contenido de la página -->
-    </div>
 
-    <!-- Contenido de la página -->
-    <div class="container">
-        <!-- Resto del contenido de la página -->
-    </div>
+    <!-- Avisos Section -->
+    <section>
+        <div class="carrusel">
+            <div class="container">
+                <h3>Avisos</h3>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <?php
+                        include('../php/conexion.php');
+                        $sqlAvisos = "SELECT * FROM avisos";
+                        $resultado = $conexion->query($sqlAvisos);
+                        $contador = 0;
+                        if ($resultado) {
+                            if ($resultado->num_rows > 0) {
+                                while ($fila = $resultado->fetch_assoc()) {
+                                    // Agregar un indicador para cada aviso
+                                    echo '<li data-target="#carouselExampleIndicators" data-slide-to="' . $contador . '" class="' . ($contador == 0 ? 'active' : '') . '"></li>';
+                                    $contador++;
+                                }
+                            }
+                        }
+                        ?>
+                    </ol>
+                    <div class="carousel-inner">
+                        <?php
+                        $resultado = $conexion->query($sqlAvisos);
+                        $contador = 0;
+                        if ($resultado) {
+                            if ($resultado->num_rows > 0) {
+                                while ($fila = $resultado->fetch_assoc()) {
+                                    // Agregar un slide para cada aviso
+                                    echo '<div class="carousel-item ' . ($contador == 0 ? 'active' : '') . '">';
+                                    echo '<h4><strong>Nombre del Aviso:</strong> ' . $fila['titulo'] . '</h4>';
+                                    echo '<p><strong>fecha de publicación:</strong> ' . $fila['fecha_publicacion'] . '</p>';
+                                    echo '<p><strong>descripción:</strong> ' . $fila['descripcion'] . '</p>';
+                                    echo '</div>';
+                                    $contador++;
+                                }
+                            }
+                        }
+                        ?>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer-->
+    <footer>
+        <h4>Proyecto desarrollado por Fernando Bernal</h4>
+    </footer>
 
     <!-- Scripts de Bootstrap y otros scripts necesarios -->
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

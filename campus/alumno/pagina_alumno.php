@@ -41,16 +41,19 @@ if (isset($_SESSION['id_usuario'])) {
                         $filaCurso = $resultadoCurso->fetch_assoc();
                         // Construir la cadena HTML con los detalles del curso
                         // Aplicar la clase CSS 'curso-caja' al enlace
-                        $detalles_curso_html .= "<a href='pagina_curso.php?id_curso=$id_curso' class='curso-caja'>";
+                        $detalles_curso_html .= "<a href='tareas_curso.php?id_curso=$id_curso' class='curso-caja'>";
                         $detalles_curso_html .= "<div class='curso'>";
-                        $detalles_curso_html .= "<h3>ID del Curso: " . $id_curso . "</h3>";
-                        $detalles_curso_html .= "<p><strong>Nombre del Curso:</strong> " . $filaCurso['nombre'] . "</p>";
-                        $detalles_curso_html .= "<p><strong>Profesor:</strong> " . obtenerNombreProfesor($filaCurso['id_profesor'], $conexion) . "</p>";
+                        $detalles_curso_html .= "<img id='foto_curso' src='../media/img/b_curso.jpg'>";
+                        $detalles_curso_html .= "<br><br>";
+                        $detalles_curso_html .= "<h4><strong>Nombre del Curso:</strong> " . $filaCurso['nombre'] . "</h4>";
+                        $detalles_curso_html .= "<h6><strong>Profesor:</strong> " . obtenerNombreProfesor($filaCurso['id_profesor'], $conexion) . "</h6>";
                         $detalles_curso_html .= "</div>";
                         $detalles_curso_html .= "</a>";
-                        $detalles_curso_html .= "<hr>";
+                        $detalles_curso_html .= "<hr class='container'>";
                     } else {
-                        echo "Error al obtener la información del curso.";
+
+                        //Al eliminar un curso desde la base de datos, queda en la inscripción, por lo cual puede dar este error. De momento, queda comentado.
+                        //echo "Error al obtener la información del curso.";
                     }
                 }
             } else {
@@ -58,8 +61,8 @@ if (isset($_SESSION['id_usuario'])) {
             }
         } else {
             // Si no es un alumno, redirigir a la página de inicio de sesión
-            header("Location: ../login.php");
-            exit();
+            //header("Location: ../login.php");
+            //exit();
         }
     } else {
         // En caso de error al obtener la información del usuario
@@ -98,38 +101,35 @@ function obtenerNombreProfesor($idProfesor, $conexion)
     <link rel="stylesheet" href="../css/estilos.css">
     <title>Campus - Curso</title>
 </head>
-<body>
+<body id="alumno-body">
+
     <!-- Header para el alumno -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <header class="bg-white">
+        <nav class="navbar navbar-expand navbar-light container">
             <div class="container-fluid">
                 <!-- Nombre del sitio o logo -->
-                <a class="navbar-brand" href="#">Nombre del Sitio</a>
+                <img id="logo" src="../media/img/cudi1.png" alt="">
 
-                <!-- Botón para dispositivos móviles -->
+                <!-- Botón para dispositivos móviles 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button>-->
 
                 <!-- Menú de navegación -->
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Mostrar el nombre del usuario -->
+                    <ul class="navbar-nav" style="margin-left: auto;">
+                        <!-- Enlace a la página principal -->
                         <li class="nav-item">
-                            <span class="navbar-text">
-                                ¡Hola, <?php echo $nombre_usuario; ?>!
-                            </span>
+                            <a class="nav-link" href="../index.php">PÁGINA PRINCIPAL</a>
                         </li>
-
                         <!-- Enlace al perfil del alumno -->
                         <li class="nav-item">
-                            <a class="nav-link" href="perfil_alumno.php">Perfil</a>
+                            <a class="nav-link" href="pagina_alumno.php">INICIO</a>
                         </li>
-
                         <!-- Botón para cerrar sesión -->
                         <li class="nav-item">
                             <form method="post" action="../php/cerrar_sesion.php">
-                                <button type="submit" name="cerrar_sesion" class="nav-link btn btn-link">Cerrar Sesión</button>
+                                <button type="submit" name="cerrar_sesion" class="nav-link btn btn-link">CERRAR SESIÓN</button>
                             </form>
                         </li>
                     </ul>
@@ -138,15 +138,91 @@ function obtenerNombreProfesor($idProfesor, $conexion)
         </nav>
     </header>
 
-    <!-- Cursos -->
-    <div class="container">
-        <!-- Muestra los detalles del curso -->
-        <h2>Detalles del Curso</h2>
-            <?php echo $detalles_curso_html; ?>
-    </div>
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container">
+            <div class="txt">
+                <h2>¡Bienvenido <?php echo $rol_usuario; ?> <?php echo $nombre_usuario; ?>!</h2>
+                <hr class="container">
+                <h5>Área Personal</h5>
+            </div>
+        </div>
+    </section>
 
-    <!-- Scripts de Bootstrap y otros scripts necesarios -->
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <!-- Cursos Section -->
+    <section>
+    <div class="container">
+        <div class="seccion">
+            <!-- Muestra los detalles del curso -->
+            <h3>Cursos</h3>
+            <hr class="container">
+            <h5>Cursos en los que te encuentras inscripto</h5>
+                <?php echo $detalles_curso_html; ?>
+            </div>
+    </section>
+
+    <!-- Avisos Section -->
+    <section>
+        <div class="carrusel">
+            <div class="container">
+                <h3>Avisos</h3>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <?php
+                        include('../php/conexion.php');
+                        $sqlAvisos = "SELECT * FROM avisos";
+                        $resultado = $conexion->query($sqlAvisos);
+                        $contador = 0;
+                        if ($resultado) {
+                            if ($resultado->num_rows > 0) {
+                                while ($fila = $resultado->fetch_assoc()) {
+                                    // Agregar un indicador para cada aviso
+                                    echo '<li data-target="#carouselExampleIndicators" data-slide-to="' . $contador . '" class="' . ($contador == 0 ? 'active' : '') . '"></li>';
+                                    $contador++;
+                                }
+                            }
+                        }
+                        ?>
+                    </ol>
+                    <div class="carousel-inner">
+                        <?php
+                        $resultado = $conexion->query($sqlAvisos);
+                        $contador = 0;
+                        if ($resultado) {
+                            if ($resultado->num_rows > 0) {
+                                while ($fila = $resultado->fetch_assoc()) {
+                                    // Agregar un slide para cada aviso
+                                    echo '<div class="carousel-item ' . ($contador == 0 ? 'active' : '') . '">';
+                                    echo '<h4><strong>Nombre del Aviso:</strong> ' . $fila['titulo'] . '</h4>';
+                                    echo '<p><strong>fecha de publicación:</strong> ' . $fila['fecha_publicacion'] . '</p>';
+                                    echo '<p><strong>descripción:</strong> ' . $fila['descripcion'] . '</p>';
+                                    echo '</div>';
+                                    $contador++;
+                                }
+                            }
+                        }
+                        ?>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--footer-->
+    <footer>
+        <h4>Proyecto desarrollado por Fernando Bernal</h4>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,6 +1,280 @@
 /* Estilos para NAV*/
 
+#logo {
+    height: 25px;
+}
+
+@media (max-width: 778px) {
+    #logo {
+        display: none;
+    }
+}
+
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ajusta el índice de apilamiento según sea necesario */
+    /* Añade otros estilos según tus preferencias */
+}
+
+.navbar-nav .nav-link {
+    position: relative; /* Asegura que el borde esté relativo al enlace */
+    transition: background-color 0.3s, color 0.3s; /* Transición suave de los cambios */
+    text-decoration: none; /* Quita el subrayado predeterminado */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #f3f3f3; /* Cambia el color de fondo al pasar el mouse */
+    color: #000000; /* Cambia el color del texto al pasar el mouse */
+}
+
+.navbar-nav .nav-link::after {
+    content: ''; /* Crea el borde */
+    position: absolute; /* Posición absoluta relativa al enlace */
+    bottom: -2px; /* Ajusta la posición del borde */
+    left: 0; /* Ajusta la posición del borde */
+    width: 100%; /* Ancho completo */
+    height: 2px; /* Grosor del borde */
+    background-color: transparent; /* Color inicial del borde */
+    transition: background-color 0.3s; /* Transición suave del color del borde */
+}
+
+.navbar-nav .nav-link:hover::after {
+    background-color: #000000; /* Cambia el color del borde al pasar el mouse */
+}
+
+
+
+
+
+
+
+/* index - Home */
+#index-body {
+    background-color: #f3f3f3;
+}
+
+
+#home {
+    position: relative;
+    background-image: url('../media/img/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #fff;
+    padding: 100px 20px;
+}
+
+#home::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(1.5px);
+    background-color: rgba(0, 0, 0, 0.5); /* Capa con fondo oscuro */
+    z-index: 1;
+}
+
+.txt {
+    text-align: center;
+    margin-top: 150px;
+    margin-bottom: 150px;
+    position: relative;
+    z-index: 90;
+    opacity: 0;
+    transform: scale(0);
+    animation: fadeInUp 2.5s ease-out forwards, scaleAnimation 1.2s ease-in-out forwards;
+} @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} @keyframes scaleAnimation {
+    from {
+        transform: scale(0.9);
+    }
+    to {
+        transform: scale(1.0);
+    }
+}
+
+.txt hr {
+    position: relative;
+    width: 35%;
+}
+.txt h2 {
+    font-size: 50px;
+}
+.txt h5 {
+    font-size: 35px;
+    position: relative;
+    font-weight: 100;
+}
+
+
+.caja {
+    padding-top: 25px;
+    width: 100%;
+    border-top: solid 1px rgb(237, 237, 237);
+}
+
+
+
+/* index - seccion */
+
+.seccion {
+    padding: 30px;
+    margin-top: 120px;
+    border-top: solid 2px black;
+    background-color: white;
+    margin-bottom: 100px;
+}
+.seccion hr {
+    width: 60%;
+}
+
+.seccion h3, h5 {
+    font-weight: 400;
+    text-align: center;
+}
+.seccion h3 {
+    margin-top: 50px;
+}
+.seccion h4 {
+    font-weight: 400;
+}
+.seccion p {
+    font-weight: 100;
+}
+.seccion h5 {
+    margin-bottom: 50px;
+}
+.links {
+    text-decoration: none;
+}
+
+.icons {
+    margin-right: 20px;
+    float: left;
+    height: 60px;
+}
+
+
+/* index - footer */
+
+footer {
+    height: 200px;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+footer h4 {
+    margin-top: 60px;
+    font-size: 1.5em;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+/* Estilos para LOGIN*/
+#login {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.08);
+    
+}
+
+#login label {
+    text-align: left !important;
+}
+
+#login .form-group label {
+    display: block;
+}
+
+@media (min-width: 778px) {
+    #login {
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+    }
+}
+
+
+
+
+
+
+/* Estilos para ALUMNO */
+#alumno-body {
+    background-color: #f3f3f3;
+}
+
+
+
 /* Estilos para CURSOS */
+
+#foto_curso {
+    width: 100%;
+}
+
+/* Estilos para AVISOS */
+.carrusel {
+    margin-top: 120px;
+    border-top: solid 2px black;
+    background-color: white;
+}
+
+.carrusel h3 {
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* carrusel */
+#carouselExampleIndicators {
+    margin-top: 20px;
+}
+
+.carousel-item {
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 100px;
+}
+
+
+/* Cambiar el color de los controles del carrusel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%);
+}
+
+/* Cambiar el color de los indicadores del carrusel */
+.carousel-indicators {
+    bottom: 10px; /* Ajusta la posición vertical de los indicadores */
+}
+
+.carousel-indicators li {
+    width: 15px; /* Ancho de los indicadores */
+    height: 15px; /* Altura de los indicadores */
+    background-color: #dcdcdc;
+    border-radius: 50%;
+    margin: 0 9px;
+    border: none; /* Quita el borde de los indicadores */
+    cursor: pointer; /* Cambia el cursor al pasar sobre los indicadores */
+}
+
+.carousel-indicators .active {
+    background-color: #838383;
+}
 
 /* Estilos para la caja del curso */
 .curso-caja {
